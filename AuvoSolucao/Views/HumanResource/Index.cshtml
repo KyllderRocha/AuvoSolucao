@@ -3,11 +3,17 @@
 }
 <h1>@ViewData["Title"]</h1>
 
+@model UploadFileViewModel
+
 <div class="m-5">
     <h3>Objetivo:</h3>
     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
     <div class="container w-50 mt-5">
-        <label class="form-label" for="pasta">Default file input example</label>
-        <input type="file" class="form-control" id="pasta" webkitdirectory />
+        
+        <form enctype="multipart/form-data" method="post" asp-action="UploadFolder">
+            <label asp-for="files" class="form-label" for="pasta">Default file input example</label>
+            <input asp-for="files" type="file" id="pasta" webkitdirectory="" directory=""  />
+            <input class="btn btn-primary" type="submit" value="Upload"  />
+        </form>
     </div>
 </div>
