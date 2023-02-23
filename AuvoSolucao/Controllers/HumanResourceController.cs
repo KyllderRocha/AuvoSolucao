@@ -1,4 +1,5 @@
 ﻿using AuvoSolucao.Models;
+using AuvoSolucao.Repository;
 using AuvoSolucao.Service;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -22,12 +23,24 @@ namespace AuvoSolucao.Controllers
         }
 
         [HttpPost]
-        public async Task<string> UploadFolder(UploadFileViewModel model)
+        public async Task<IActionResult> UploadFolder(UploadFileViewModel model)
         {
-            var file = Request.Form.Files[0];
-
+            if(model.files == null)
+                return View("Index");
+            RepositoryTemp.nomeArquivo = string.Empty;
+            RepositoryTemp.QuantidadeArquivo = 0;
             await humanResourceService.Processamento(model);
-            return "OK";
+            return View("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Download()
+        {
+            var departamentoViewModels = RepositoryTemp.departamentoViewModels.OrderBy(d => d.Departamento).ToList();
+            var jsonstr = System.Text.Json.JsonSerializer.Serialize(departamentoViewModels);
+            byte[] byteArray = System.Text.ASCIIEncoding.ASCII.GetBytes(jsonstr);
+
+            return File(byteArray, "application/force-download", RepositoryTemp.nomeArquivo + ".json");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
