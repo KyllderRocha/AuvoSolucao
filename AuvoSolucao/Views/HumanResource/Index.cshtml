@@ -1,0 +1,54 @@
+﻿@using AuvoSolucao.Repository;
+@{
+    ViewData["Title"] = "Human Resources";
+}
+<h1>@ViewData["Title"]</h1>
+
+@model UploadFileViewModel
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<div class="m-5">
+    <h3>Objetivo:</h3>
+    <p>Ao enviar uma pasta com os arquivos CSV, será feito uma análise para retornar os dados necessários em formato JSON</p>
+    <div class="container w-50 mt-5">
+        <input hidden value="@RepositoryTemp.nomeArquivo" id="nomeArquivo" />
+        
+        <form enctype="multipart/form-data" method="post" asp-action="UploadFolder">
+            <label asp-for="files" class="form-label" for="pasta">Default file input example</label>
+            <input asp-for="files" type="file" id="pasta" webkitdirectory="" directory=""  />
+            <input class="btn btn-primary mt-3" type="submit" value="Upload" id="Upload" />
+        </form>
+
+        <form enctype="multipart/form-data" method="get" asp-action="Download" id="Download"  class="mt-3"  >
+            <div class="progress" id="DivProgressbar" @(string.IsNullOrEmpty(RepositoryTemp.nomeArquivo) ? "hidden" : "")>
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" id="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+            </div>
+
+            <input class="btn btn-primary" type="submit" value="Download" id="BtnDownload" hidden />
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        if ($("#nomeArquivo").val() != ""){
+            ProgressBar();
+        }
+    });
+
+    function ProgressBar() {
+        $.get("/ProgressBar/Progress", function (progress) {
+            console.log(progress)
+            $("#progressbar").css("width", progress + "%");
+            if (progress == 100) {
+                $("#DivProgressbar").prop("hidden", true);
+                $("#BtnDownload").prop("hidden", false);
+            } else {
+                $("#DivProgressbar").prop("hidden", false);
+                setTimeout(ProgressBar, 1000);
+            }
+        });
+    }
+</script>

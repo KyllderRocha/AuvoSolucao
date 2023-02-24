@@ -1,21 +1,23 @@
 ﻿using AuvoSolucao.Models;
+using AuvoSolucao.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace AuvoSolucao.Controllers
 {
-    public class HomeController : Controller
+    public class ProgressBarController : Controller
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public ProgressBarController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public JsonResult Progress()
         {
-            return View();
+            return Json(RepositoryTemp.PorcentagemAtual);
         }
 
         public IActionResult About()
