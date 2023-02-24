@@ -38,7 +38,7 @@ namespace AuvoSolucao.Controllers
         {
             var departamentoViewModels = RepositoryTemp.departamentoViewModels.OrderBy(d => d.Departamento).ToList();
             var jsonstr = System.Text.Json.JsonSerializer.Serialize(departamentoViewModels);
-            byte[] byteArray = System.Text.ASCIIEncoding.ASCII.GetBytes(jsonstr);
+            byte[] byteArray = System.Text.ASCIIEncoding.Latin1.GetBytes(jsonstr);
 
             return File(byteArray, "application/force-download", RepositoryTemp.nomeArquivo + ".json");
         }

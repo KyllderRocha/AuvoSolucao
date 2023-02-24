@@ -70,19 +70,21 @@ namespace AuvoSolucao.Service
 
         private async void CarregarDados(FileInfo file)
         {
-            Random randNum = new Random();
-            await Task.Delay(randNum.Next(10000, 30000));
+            //Random randNum = new Random();
+            //await Task.Delay(randNum.Next(10000, 30000));
 
             DepartamentoViewModel departamento = new DepartamentoViewModel();
             string fileName = file.Name;
             var fileNameArray = fileName.Split(".")[0].Split("-");
             departamento.Departamento = fileNameArray[0];
             departamento.MesVigencia = fileNameArray[1];
-            departamento.AnoVigencia = fileNameArray[2];
+            departamento.AnoVigencia = int.Parse(fileNameArray[2]);
 
             List<FuncionariosCSVModel> funcionarios = new List<FuncionariosCSVModel>();
 
-            StreamReader reader = new StreamReader(file.FullName, Encoding.UTF8, true);
+            //StreamReader reader = new StreamReader(file.FullName, Encoding.GetEncoding(c.TextInfo.ANSICodePage));
+
+            StreamReader reader = new StreamReader(file.FullName, Encoding.Latin1, true);
 
             var linha = reader.ReadLine();
             while (true)
@@ -126,7 +128,7 @@ namespace AuvoSolucao.Service
 
                 var funcionarioVM = new FuncionariosViewModel();
                 funcionarioVM.Nome = elmentInicial.Nome;
-                funcionarioVM.Codigo = elmentInicial.Codigo;
+                funcionarioVM.Codigo = int.Parse(elmentInicial.Codigo);
                 //double ValorHora = Double.Parse(elmentInicial.ValorHora.Replace("R$",""));
 
                 foreach (var LinhaCSV in funcionario)
@@ -148,19 +150,19 @@ namespace AuvoSolucao.Service
 
                     int horasTrabalhadas = Saida.Hours - Entrada.Hours - (SaidaAlmoco.Hours - EntradaAlmoco.Hours);
 
-                    funcionarioVM.TotalReceber += horasTrabalhadas * ValorHora;
+                    funcionarioVM.AdicionarValorReceber(horasTrabalhadas * ValorHora);
 
                     if (DiaSemana == "Saturday" || DiaSemana == "Sunday")
                     {
                         funcionarioVM.DiasExtras++;
-                        funcionarioVM.HorasExtras += horasTrabalhadas;
+                        funcionarioVM.AdicionarValorHorasExtras(horasTrabalhadas);
                     }
                     else
                     {
                         if(horasTrabalhadas > 8)
-                            funcionarioVM.HorasExtras += horasTrabalhadas - 8;
+                            funcionarioVM.AdicionarValorHorasExtras(horasTrabalhadas - 8);
                         else if (horasTrabalhadas < 8)
-                            funcionarioVM.HorasDebito += 8 - horasTrabalhadas;
+                            funcionarioVM.AdicionarValorHorasDebito(8 - horasTrabalhadas);
                     }
                 }
                 var diasFalta = diasUteis - (funcionarioVM.DiasTrabalhados - funcionarioVM.DiasExtras);
@@ -168,7 +170,7 @@ namespace AuvoSolucao.Service
                 if(diasFalta > 0)
                 {
                     funcionarioVM.DiasFalta = diasFalta;
-                    funcionarioVM.HorasDebito += diasFalta * 8;
+                    funcionarioVM.AdicionarValorHorasDebito(diasFalta * 8);
                 }
                 funcionariosViewModel.Add(funcionarioVM);
             }

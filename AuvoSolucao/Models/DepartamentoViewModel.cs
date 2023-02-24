@@ -9,10 +9,10 @@ namespace AuvoSolucao.Models
 
         public string Departamento { get; set; }
         public string MesVigencia { get; set; }
-        public string AnoVigencia { get; set; }
+        public int AnoVigencia { get; set; }
         public double TotalPagar { 
             get {
-                return Funcionarios.Sum(f => f.TotalReceber);
+                return Funcionarios.Sum(f => f.ValorTotalReceber);
             }
         }
         public double TotalDescontos { get; set; }
