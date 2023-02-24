@@ -5,13 +5,14 @@ namespace AuvoSolucao.Models
         public string Nome { get; set; }
         public int Codigo { get; set; }
         internal double ValorTotalReceber { get; set; }
+        internal double ValorHora { get; set; }
         public double TotalReceber { 
             get { 
                 return Math.Round(ValorTotalReceber, 1);
             } 
         }
 
-        private double ValorHorasExtras { get; set; }
+        internal double ValorHorasExtras { get; set; }
         public double HorasExtras
         {
             get
@@ -19,7 +20,7 @@ namespace AuvoSolucao.Models
                 return Math.Round(ValorHorasExtras, 2);
             }
         }
-        private double ValorHorasDebito { get; set; }
+        internal double ValorHorasDebito { get; set; }
         public double HorasDebito
         {
             get

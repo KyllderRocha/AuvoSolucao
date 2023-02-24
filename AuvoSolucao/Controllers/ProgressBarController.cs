@@ -17,15 +17,7 @@ namespace AuvoSolucao.Controllers
         [HttpGet]
         public JsonResult Progress()
         {
-            //var obj = new
-            //{
-            //    PorcentagemAtual = RepositoryTemp.PorcentagemAtual,
-            //    QuantidadeArquivo = RepositoryTemp.QuantidadeArquivo,
-            //    nomeArquivo = RepositoryTemp.nomeArquivo,
-            //    arquivos = RepositoryTemp.departamentoViewModels.Count()
-            //};
             return Json(RepositoryTemp.PorcentagemAtual);
-            //return Json(obj);
         }
 
         public IActionResult About()

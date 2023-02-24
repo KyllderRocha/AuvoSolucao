@@ -126,15 +126,17 @@ namespace AuvoSolucao.Service
                 if (string.IsNullOrEmpty(elmentInicial.Nome))
                     continue;
 
+                var ValorHoraStr = elmentInicial.ValorHora.Replace("R$", "").Replace(" ", "");
+                double ValorHora = Double.Parse(ValorHoraStr);
+
                 var funcionarioVM = new FuncionariosViewModel();
                 funcionarioVM.Nome = elmentInicial.Nome;
                 funcionarioVM.Codigo = int.Parse(elmentInicial.Codigo);
-                //double ValorHora = Double.Parse(elmentInicial.ValorHora.Replace("R$",""));
+                funcionarioVM.ValorHora = ValorHora;
 
                 foreach (var LinhaCSV in funcionario)
                 {
-                    var ValorHoraStr = elmentInicial.ValorHora.Replace("R$", "").Replace(" ", "");
-                    double ValorHora = Double.Parse(ValorHoraStr);
+                    
                     DateTime data = DateTime.Parse(LinhaCSV.Data);
                     string DiaSemana = data.DayOfWeek.ToString();
 

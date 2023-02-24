@@ -12,11 +12,26 @@ namespace AuvoSolucao.Models
         public int AnoVigencia { get; set; }
         public double TotalPagar { 
             get {
-                return Funcionarios.Sum(f => f.ValorTotalReceber);
+                return Math.Round(Funcionarios.Sum(f => f.ValorTotalReceber),1);
             }
         }
-        public double TotalDescontos { get; set; }
-        public double TotalExtras { get; set; }
+
+        public double TotalDescontos
+        {
+            get
+            {
+                return Math.Round(Funcionarios.Sum(f => f.ValorHora * f.ValorHorasDebito), 1);
+            }
+        }
+
+        public double TotalExtras
+        {
+            get
+            {
+                return Math.Round(Funcionarios.Sum(f => f.ValorHora * f.ValorHorasExtras), 1);
+            }
+        }
+
         public List<FuncionariosViewModel> Funcionarios { get; set; }
     }
 }

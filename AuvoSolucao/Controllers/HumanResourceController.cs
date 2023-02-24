@@ -2,7 +2,11 @@
 using AuvoSolucao.Repository;
 using AuvoSolucao.Service;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Diagnostics;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Unicode;
 
 namespace AuvoSolucao.Controllers
 {
@@ -37,8 +41,12 @@ namespace AuvoSolucao.Controllers
         public async Task<IActionResult> Download()
         {
             var departamentoViewModels = RepositoryTemp.departamentoViewModels.OrderBy(d => d.Departamento).ToList();
-            var jsonstr = System.Text.Json.JsonSerializer.Serialize(departamentoViewModels);
-            byte[] byteArray = System.Text.ASCIIEncoding.Latin1.GetBytes(jsonstr);
+
+            var options = new JsonSerializerOptions();
+            options.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+
+            var jsonstr = System.Text.Json.JsonSerializer.Serialize(departamentoViewModels, options);
+            byte[] byteArray = System.Text.ASCIIEncoding.Default.GetBytes(jsonstr);
 
             return File(byteArray, "application/force-download", RepositoryTemp.nomeArquivo + ".json");
         }
